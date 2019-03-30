@@ -116,6 +116,6 @@ int main()
         input[i].destination = d;
         input[i].weight = w;
     }
-    Prims_algo(input, V, E);
+    Dijktras_algo(input, V, E);
     return 0;
 }
