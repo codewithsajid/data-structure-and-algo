@@ -1,68 +1,50 @@
-#include <iostream>
+#include<iostream>
 using namespace std;
 
-int a[50];
-void merge(int,int,int);
-void merge_sort(int low,int high)
+void Merge(int *a, int low, int mid, int high)
 {
-    int mid;
-    if(low<high)
+    int temp[100];
+    int i = low, j = mid+1, k = low;
+    while(i<=mid && j<=high)
     {
-        mid = low + (high-low)/2; //This avoids overflow when low, high are too large
-        merge_sort(low,mid);
-        merge_sort(mid+1,high);
-        merge(low,mid,high);
+        if(a[i]<=a[j])
+            temp[k++] = a[i++];
+        else
+            temp[k++] = a[j++];
     }
+    while(i<=mid)
+        temp[k++] = a[i++];
+
+    while(j<=high)
+        temp[k++] = a[j++];
+
+    for(int s=low; s<=high; s++)
+        a[s] = temp[s];
 }
-void merge(int low,int mid,int high)
+
+void merge_sort(int *a, int low, int high)
 {
-    int h,i,j,b[50],k;
-    h=low;
-    i=low;
-    j=mid+1;
-    while((h<=mid)&&(j<=high))
-    {
-        if(a[h]<=a[j])
-        {
-            b[i]=a[h];
-            h++;
-        }
-        else
-        {
-            b[i]=a[j];
-            j++;
-        }
-        i++;
-    }
-        if(h>mid)
-        {
-            for(k=j;k<=high;k++)
-            {
-                b[i]=a[k];
-                i++;
-            }
-        }
-        else
-        {
-            for(k=h;k<=mid;k++)
-            {
-                b[i]=a[k];
-                i++;
-            }
-        }
-    for(k=low;k<=high;k++) a[k]=b[k];
+    if(low >= high)
+        return;
+
+    int mid = (high+low)/2;
+    merge_sort(a, low, mid);
+    merge_sort(a, mid+1, high);
+    Merge(a, low, mid, high);
 }
+
 int main()
 {
-    int num,i;
+    int size;
+    int a[100];
     cout<<"Enter size of array: ";
-    cin>>num;
-    cout<<"Enter elements to be sorted:"<<endl;
-    for(i=1;i<=num;i++)
-    cin>>a[i] ;
-    merge_sort(1,num);
-    cout<<"Sorted elements are: ";
-    for(i=1;i<=num;i++)
-        cout<<a[i]<<"  ";
+    cin>>size;
+    cout<<"Enter elements to be sorted: ";
+    for(int i=0; i<size; i++)
+        cin>>a[i];
+    merge_sort(a, 0, size-1);
+    cout<<"Elements after sorting are: ";
+    for(int i=0; i<size; i++)
+        cout<<a[i]<<" ";
     return 0;
 }
